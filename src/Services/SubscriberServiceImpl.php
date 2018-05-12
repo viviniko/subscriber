@@ -2,7 +2,7 @@
 
 namespace Viviniko\Subscriber\Services;
 
-use Viviniko\Agent\Agent;
+use Viviniko\Agent\Facades\Agent;
 use Viviniko\Subscriber\Contracts\SubscriberService as SubscriberServiceInterface;
 use Viviniko\Subscriber\Events\SubscriberCanceled;
 use Viviniko\Subscriber\Events\SubscriberCreated;
