@@ -12,4 +12,9 @@ class EloquentSubscriber extends SimpleRepository implements SubscriberRepositor
     {
         return $this->findBy('email', $email)->first();
     }
+
+    public function hasClientId($clientId)
+    {
+        return $this->exists('client_id', $clientId);
+    }
 }

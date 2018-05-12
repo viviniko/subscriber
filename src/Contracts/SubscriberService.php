@@ -4,6 +4,8 @@ namespace Viviniko\Subscriber\Contracts;
 
 interface SubscriberService
 {
+    public function isClientSubscribed($clientId = null);
+
     public function addSubscriber($email, $data = []);
 
     public function removeSubscriber($email);

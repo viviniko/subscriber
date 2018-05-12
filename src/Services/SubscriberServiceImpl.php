@@ -2,6 +2,7 @@
 
 namespace Viviniko\Subscriber\Services;
 
+use Viviniko\Agent\Agent;
 use Viviniko\Subscriber\Contracts\SubscriberService as SubscriberServiceInterface;
 use Viviniko\Subscriber\Events\SubscriberCanceled;
 use Viviniko\Subscriber\Events\SubscriberCreated;
@@ -9,6 +10,7 @@ use Viviniko\Subscriber\Events\SubscriberRemoved;
 use Viviniko\Subscriber\Events\SubscriberResubcribed;
 use Viviniko\Subscriber\Repositories\Subscriber\SubscriberRepository;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriberServiceImpl implements SubscriberServiceInterface
 {
@@ -30,6 +32,11 @@ class SubscriberServiceImpl implements SubscriberServiceInterface
         $this->events = $events;
     }
 
+    public function isClientSubscribed($clientId = null)
+    {
+        return $this->subscribeUsers->hasClientId($clientId ?? Agent::clientId());
+    }
+
     public function getSubscriber($email)
     {
         return $this->subscribeUsers->findByEmail($email);
@@ -40,13 +47,23 @@ class SubscriberServiceImpl implements SubscriberServiceInterface
         $subscriber = $this->subscribeUsers->findByEmail($email);
         if ($subscriber) {
             if (!$subscriber->is_subscribe) {
-                $subscriber = $this->subscribeUsers->update($subscriber->id, ['is_subscribe' => true]);
+                $subscriber = $this->subscribeUsers->update($subscriber->id, [
+                    'is_subscribe' => true,
+                    'user_id' => Auth::id(),
+                    'client_id' => Agent::clientId()
+                ]);
                 $this->events->dispatch(new SubscriberResubcribed($email));
             } else {
                 return false;
             }
         } else {
-            $subscriber = $this->subscribeUsers->create(array_merge($data, ['email' => $email, 'is_subscribe' => true]));
+            $subscriber = $this->subscribeUsers->create(array_merge([
+                'user_id' => Auth::id(),
+                'client_id' => Agent::clientId()
+            ], $data, [
+                'email' => $email,
+                'is_subscribe' => true
+            ]));
             $this->events->dispatch(new SubscriberCreated($email));
         }
 
