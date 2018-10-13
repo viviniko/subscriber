@@ -3,7 +3,6 @@
 namespace Viviniko\Subscriber\Services;
 
 use Viviniko\Agent\Facades\Agent;
-use Viviniko\Subscriber\Contracts\SubscriberService as SubscriberServiceInterface;
 use Viviniko\Subscriber\Events\SubscriberCanceled;
 use Viviniko\Subscriber\Events\SubscriberCreated;
 use Viviniko\Subscriber\Events\SubscriberRemoved;
@@ -12,7 +11,7 @@ use Viviniko\Subscriber\Repositories\Subscriber\SubscriberRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Auth;
 
-class SubscriberServiceImpl implements SubscriberServiceInterface
+class SubscriberServiceImpl implements SubscriberService
 {
     /**
      * @var \Viviniko\Subscriber\Repositories\Subscriber\SubscriberRepository

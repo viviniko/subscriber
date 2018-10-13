@@ -1,6 +1,6 @@
 <?php
 
-namespace Viviniko\Subscriber\Contracts;
+namespace Viviniko\Subscriber\Services;
 
 interface SubscriberService
 {

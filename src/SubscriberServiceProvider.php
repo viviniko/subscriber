@@ -74,7 +74,7 @@ class SubscriberServiceProvider extends BaseServiceProvider
     protected function registerSubscriberService()
     {
         $this->app->singleton(
-            \Viviniko\Subscriber\Contracts\SubscriberService::class,
+            \Viviniko\Subscriber\Services\SubscriberService::class,
             \Viviniko\Subscriber\Services\SubscriberServiceImpl::class
         );
     }
@@ -87,7 +87,7 @@ class SubscriberServiceProvider extends BaseServiceProvider
     public function provides()
     {
         return [
-            \Viviniko\Subscriber\Contracts\SubscriberService::class,
+            \Viviniko\Subscriber\Services\SubscriberService::class,
         ];
     }
 }

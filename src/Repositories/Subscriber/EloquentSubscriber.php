@@ -2,15 +2,18 @@
 
 namespace Viviniko\Subscriber\Repositories\Subscriber;
 
-use Viviniko\Repository\SimpleRepository;
+use Viviniko\Repository\EloquentRepository;
 
-class EloquentSubscriber extends SimpleRepository implements SubscriberRepository
+class EloquentSubscriber extends EloquentRepository implements SubscriberRepository
 {
-    protected $modelConfigKey = 'subscriber.subscribe_user';
+    public function __construct()
+    {
+        parent::__construct('subscriber.subscribe_user');
+    }
 
     public function findByEmail($email)
     {
-        return $this->findBy('email', $email)->first();
+        return $this->findBy('email', $email);
     }
 
     public function hasClientId($clientId)
