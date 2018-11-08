@@ -2,14 +2,14 @@
 
 namespace Viviniko\Subscriber\Services;
 
-use Viviniko\Agent\Facades\Agent;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Facades\Auth;
+use Viviniko\Client\Facades\Client;
 use Viviniko\Subscriber\Events\SubscriberCanceled;
 use Viviniko\Subscriber\Events\SubscriberCreated;
 use Viviniko\Subscriber\Events\SubscriberRemoved;
 use Viviniko\Subscriber\Events\SubscriberResubcribed;
 use Viviniko\Subscriber\Repositories\Subscriber\SubscriberRepository;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Facades\Auth;
 
 class SubscriberServiceImpl implements SubscriberService
 {
@@ -33,7 +33,7 @@ class SubscriberServiceImpl implements SubscriberService
 
     public function isClientSubscribed($clientId = null)
     {
-        return $this->subscribeUsers->hasClientId($clientId ?? Agent::clientId());
+        return $this->subscribeUsers->hasClientId($clientId ?? Client::id());
     }
 
     public function getSubscriber($email)
@@ -49,7 +49,7 @@ class SubscriberServiceImpl implements SubscriberService
                 $subscriber = $this->subscribeUsers->update($subscriber->id, [
                     'is_subscribe' => true,
                     'user_id' => Auth::id(),
-                    'client_id' => Agent::clientId()
+                    'client_id' => Client::id()
                 ]);
                 $this->events->dispatch(new SubscriberResubcribed($email));
             } else {
@@ -58,7 +58,7 @@ class SubscriberServiceImpl implements SubscriberService
         } else {
             $subscriber = $this->subscribeUsers->create(array_merge([
                 'user_id' => Auth::id(),
-                'client_id' => Agent::clientId()
+                'client_id' => Client::id()
             ], $data, [
                 'email' => $email,
                 'is_subscribe' => true
