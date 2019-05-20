@@ -31,7 +31,8 @@ class CreateSubscriberTable extends Migration
         Schema::create($this->subscribersTable, function (Blueprint $table) {
             $table->increments('id');
             $table->string('email', 128)->unique();
-            $table->string('client_id', 128)->nullable();
+            $table->string('client_id', 128)->index();
+            $table->text('user_agent')->nullable();
             $table->boolean('is_subscribe')->default(true);
             $table->timestamps();
         });
