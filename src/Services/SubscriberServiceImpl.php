@@ -16,19 +16,11 @@ class SubscriberServiceImpl implements SubscriberService
     /**
      * @var \Viviniko\Subscriber\Repositories\Subscriber\SubscriberRepository
      */
-    protected $subscribeUsers;
+    protected $subscribers;
 
-    /**
-     * Instance of the event dispatcher.
-     *
-     * @var \Illuminate\Contracts\Events\Dispatcher
-     */
-    protected $events;
-
-    public function __construct(SubscriberRepository $subscribeUsers, Dispatcher $events)
+    public function __construct(SubscriberRepository $subscribers)
     {
-        $this->subscribeUsers = $subscribeUsers;
-        $this->events = $events;
+        $this->subscribers = $subscribers;
     }
 
     public function isClientSubscribed($clientId = null)
@@ -38,32 +30,30 @@ class SubscriberServiceImpl implements SubscriberService
 
     public function getSubscriber($email)
     {
-        return $this->subscribeUsers->findByEmail($email);
+        return $this->subscribers->findBy('email', $email);
     }
 
     public function addSubscriber($email, $data = [])
     {
-        $subscriber = $this->subscribeUsers->findByEmail($email);
+        $subscriber = $this->subscribers->findBy('email', $email);
         if ($subscriber) {
             if (!$subscriber->is_subscribe) {
-                $subscriber = $this->subscribeUsers->update($subscriber->id, [
+                $subscriber = $this->subscribers->update($subscriber->id, [
                     'is_subscribe' => true,
                     'user_id' => Auth::id(),
                     'client_id' => Client::id()
                 ]);
-                $this->events->dispatch(new SubscriberResubcribed($email));
             } else {
                 return false;
             }
         } else {
-            $subscriber = $this->subscribeUsers->create(array_merge([
+            $subscriber = $this->subscribers->create(array_merge([
                 'user_id' => Auth::id(),
                 'client_id' => Client::id()
             ], $data, [
                 'email' => $email,
                 'is_subscribe' => true
             ]));
-            $this->events->dispatch(new SubscriberCreated($email));
         }
 
         return $subscriber;
@@ -71,19 +61,17 @@ class SubscriberServiceImpl implements SubscriberService
 
     public function removeSubscriber($email)
     {
-        $subscriber = $this->subscribeUsers->findByEmail($email);
+        $subscriber = $this->subscribers->findBy('email', $email);
         if ($subscriber) {
-            $this->subscribeUsers->delete($subscriber->id);
-            $this->events->dispatch(new SubscriberRemoved($email));
+            $this->subscribers->delete($subscriber->id);
         }
     }
 
     public function unsubscribe($email)
     {
-        $subscriber = $this->subscribeUsers->findByEmail($email);
+        $subscriber = $this->subscribers->findBy('email', $email);
         if ($subscriber && $subscriber->is_subscribe) {
-            $this->subscribeUsers->update($subscriber->id, ['is_subscribe' => false]);
-            $this->events->dispatch(new SubscriberCanceled($email));
+            $this->subscribers->update($subscriber->id, ['is_subscribe' => false]);
         }
     }
 }
