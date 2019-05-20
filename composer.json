@@ -13,6 +13,7 @@
     "require": {
         "php": ">=7.0",
         "viviniko/client": "dev-master",
+        "viviniko/repository": "dev-master",
         "viviniko/support": "dev-master"
     },
     "autoload": {

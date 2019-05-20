@@ -10,14 +10,14 @@ class CreateSubscriberTable extends Migration
     /**
      * @var string
      */
-    protected $subscribeUsersTable;
+    protected $subscribersTable;
 
     /**
      * CreateCatalogTable constructor.
      */
     public function __construct()
     {
-        $this->subscribeUsersTable = Config::get('subscriber.subscribe_users_table');
+        $this->subscribersTable = Config::get('subscriber.subscribers_table');
     }
 
     /**
@@ -27,12 +27,11 @@ class CreateSubscriberTable extends Migration
      */
     public function up()
     {
-        // Create table for storing subscribe users
-        Schema::create($this->subscribeUsersTable, function (Blueprint $table) {
+        // Create table for storing subscribers
+        Schema::create($this->subscribersTable, function (Blueprint $table) {
             $table->increments('id');
             $table->string('email', 128)->unique();
-            $table->unsignedInteger('user_id')->nullable();
-            $table->string('client_id', 32)->nullable();
+            $table->string('client_id', 128)->nullable();
             $table->boolean('is_subscribe')->default(true);
             $table->timestamps();
         });
@@ -45,6 +44,6 @@ class CreateSubscriberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->subscribeUsersTable);
+        Schema::dropIfExists($this->subscribersTable);
     }
 }

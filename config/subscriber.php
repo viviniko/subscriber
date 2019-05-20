@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'subscribe_users_table' => 'subscriber_users',
+    'subscribers_table' => 'subscribers',
 
-    'subscribe_user' => 'Viviniko\Subscriber\Models\SubscribeUser',
+    'subscriber' => 'Viviniko\Subscriber\Models\Subscriber',
 ];

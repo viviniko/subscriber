@@ -2,9 +2,9 @@
 
 namespace Viviniko\Subscriber\Repositories\Subscriber;
 
-interface SubscriberRepository
-{
-    public function findByEmail($email);
+use Viviniko\Repository\CrudRepository;
 
-    public function hasClientId($clientId);
+interface SubscriberRepository extends CrudRepository
+{
+
 }

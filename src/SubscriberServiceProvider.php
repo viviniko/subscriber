@@ -41,8 +41,6 @@ class SubscriberServiceProvider extends BaseServiceProvider
 
         $this->registerRepositories();
 
-        $this->registerSubscriberService();
-
         $this->registerCommands();
     }
 
@@ -67,19 +65,6 @@ class SubscriberServiceProvider extends BaseServiceProvider
     }
 
     /**
-     * Register the subscriber service provider.
-     *
-     * @return void
-     */
-    protected function registerSubscriberService()
-    {
-        $this->app->singleton(
-            \Viviniko\Subscriber\Services\SubscriberService::class,
-            \Viviniko\Subscriber\Services\SubscriberServiceImpl::class
-        );
-    }
-
-    /**
      * Get the services provided by the provider.
      *
      * @return array
@@ -87,7 +72,6 @@ class SubscriberServiceProvider extends BaseServiceProvider
     public function provides()
     {
         return [
-            \Viviniko\Subscriber\Services\SubscriberService::class,
         ];
     }
 }
