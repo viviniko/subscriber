@@ -4,10 +4,10 @@ namespace Viviniko\Subscriber\Events;
 
 class SubscriberEvent
 {
-    public $email;
+    public $subscriber;
 
-    public function __construct($email)
+    public function __construct($subscriber)
     {
-        $this->email = $email;
+        $this->subscriber = $subscriber;
     }
 }
